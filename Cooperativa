@@ -1,0 +1,140 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+
+class Socio {
+public:
+    string nombre;
+    string apellido;
+    string celular;
+    string dni;
+
+    Socio(string nombre, string apellido, string celular, string dni) : nombre(nombre), apellido(apellido), celular(celular), dni(dni) {}
+};
+
+
+class Producto {
+public:
+    string tipo;
+
+    Producto(string tipo) : tipo(tipo) {}
+};
+
+
+class Cooperativa {
+private:
+    vector<Socio> socios;
+    vector<Producto> productos;
+
+public:
+    
+    void agregarSocio(string nombre, string apellido, string celular, string dni) {
+        Socio nuevoSocio(nombre, apellido, celular, dni);
+        socios.push_back(nuevoSocio);
+    }
+
+    
+    void eliminarSocio(int indice) {
+        if (indice >= 0 && indice < socios.size()) {
+            socios.erase(socios.begin() + indice);
+            cout << "Socio eliminado correctamente." << endl;
+        } else {
+            cout << "Índice de socio inválido." << endl;
+        }
+    }
+
+
+    
+    void clasificarSociosPorProducto(string tipoProducto) {
+        cout << "Socios que ofrecen " << tipoProducto << ":" << endl;
+        for (const Socio& socio : socios) {
+            cout << socio.nombre << " " << socio.apellido << endl;
+        }
+    }
+
+    
+    void agregarAporte(int indiceSocio, double aporte) {
+        if (indiceSocio >= 0 && indiceSocio < socios.size()) {
+            
+            cout << "Aporte de " << aporte << " registrado para el socio " << socios[indiceSocio].nombre << endl;
+        } else {
+            cout << "Índice de socio inválido." << endl;
+        }
+    }
+};
+
+
+void menuPrincipal(Cooperativa& cooperativa) {
+    int opcion;
+    do {
+        cout << "\n--- MENÚ PRINCIPAL ---" << endl;
+        cout << "1. Agregar Socio" << endl;
+        cout << "2. Eliminar Socio" << endl;
+        cout << "3. Clasificar Socios por Producto" << endl;
+        cout << "4. Agregar Aporte de Socio" << endl;
+        cout << "5. Salir" << endl;
+        cout << "Ingrese su opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1: {
+                string nombre, apellido, celular, dni;
+                cout << "\nIngrese el nombre del socio: ";
+                cin >> nombre;
+                cout << "Ingrese el apellido del socio: ";
+                cin >> apellido;
+                cout << "Ingrese el número de celular del socio: ";
+                cin >> celular;
+                cout << "Ingrese el DNI del socio: ";
+                cin >> dni;
+                cooperativa.agregarSocio(nombre, apellido, celular, dni);
+                break;
+            }
+            case 2: {
+                int indice;
+                cout << "\nIngrese el índice del socio que desea eliminar: ";
+                cin >> indice;
+                cooperativa.eliminarSocio(indice);
+                break;
+            }
+            
+            case 3: {
+                string tipoProducto;
+                cout << "\nIngrese el tipo de producto para clasificar a los socios: ";
+                cin >> tipoProducto;
+                cooperativa.clasificarSociosPorProducto(tipoProducto);
+                break;
+            }
+            case 5: {
+                int indiceSocio;
+                double aporte;
+                cout << "\nIngrese el índice del socio al que desea agregar el aporte: ";
+                cin >> indiceSocio;
+                cout << "Ingrese el monto del aporte: ";
+                cin >> aporte;
+                cooperativa.agregarAporte(indiceSocio, aporte);
+                break;
+            }
+            case 0: {
+                cout << "Saliendo del programa. ¡Hasta luego!" << endl;
+                break;
+            }
+            default:
+                cout << "Opción inválida. Por favor, seleccione una opción válida." << endl;
+        }
+    } while (opcion != 0);
+}
+
+int main() {
+    
+    Cooperativa cooperativa;
+
+    
+    menuPrincipal(cooperativa);
+
+    return 0;
+}
